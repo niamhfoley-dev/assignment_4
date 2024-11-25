@@ -3,7 +3,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app, abort, jsonify
 from flask_login import login_required, current_user
 from app.forms import CreatePostForm, CommentForm
-from app.models import Post, Comment, CommentLike, PostLike
+from app.models import Post, Comment, CommentLike, PostLike, PostDislike
 from app import db
 
 post_bp = Blueprint('post', __name__, url_prefix='/posts')
@@ -64,20 +64,39 @@ def post_detail(post_id):
     )
 
 
-@post_bp.route('/post/<int:post_id>/like', methods=['POST'])
-@login_required
-def toggle_post_like(post_id):
+@post_bp.route('/post/<int:post_id>/<reaction>', methods=['POST'])
+def toggle_post_reaction(post_id, reaction):
+    print(post_id, reaction)
     post = Post.query.get_or_404(post_id)
-    like = PostLike.query.filter_by(user_id=current_user.id, post_id=post_id).first()
+    user_id = current_user.id  # Assuming you're using Flask-Login
 
-    if like:
-        db.session.delete(like)
+    if reaction == 'like':
+        # Check if user already liked the post
+        existing_like = PostLike.query.filter_by(post_id=post.id, user_id=user_id).first()
+        if existing_like:
+            db.session.delete(existing_like)
+        else:
+            db.session.add(PostLike(post_id=post.id, user_id=user_id))
+        # Remove dislike if it exists
+        PostDislike.query.filter_by(post_id=post.id, user_id=user_id).delete()
+    elif reaction == 'dislike':
+        # Check if user already disliked the post
+        existing_dislike = PostDislike.query.filter_by(post_id=post.id, user_id=user_id).first()
+        if existing_dislike:
+            db.session.delete(existing_dislike)
+        else:
+            db.session.add(PostDislike(post_id=post.id, user_id=user_id))
+        # Remove like if it exists
+        PostLike.query.filter_by(post_id=post.id, user_id=user_id).delete()
     else:
-        new_like = PostLike(user_id=current_user.id, post_id=post_id)
-        db.session.add(new_like)
+        return jsonify({'error': 'Invalid reaction type'}), 400
 
     db.session.commit()
-    return jsonify(success=True)
+    return jsonify({
+        'likes': post.likes.count(),
+        'dislikes': post.dislikes.count()
+    })
+
 
 
 @post_bp.route('/comment/<int:comment_id>/like', methods=['POST'])
