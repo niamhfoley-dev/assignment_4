@@ -90,14 +90,7 @@
                 });
 
                 if (response.ok) {
-                    const data = response.json();
-                    if (data['status'] === 'unfollowed') {
-                        followBtn.textContent = 'Follow';
-                        followBtn.setAttribute('data-following', 'false');
-                    } else if (data.status === 'followed') {
-                        followBtn.textContent = 'Unfollow';
-                        followBtn.setAttribute('data-following', 'true');
-                    }
+                    location.reload();
                 } else {
                     alert(response['error']);
 
