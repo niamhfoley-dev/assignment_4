@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}{{ user.username }}'s Profile - Gardening Social{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+
+    <div class="profile-container">
+        <div class="profile-row">
+            <!-- Profile Header with Picture and Basic Info -->
+            <div class="profile-header">
+                <img src="{{ user.profile_picture or url_for('static', filename='img/default_profile.webp') }}"
+                     alt="{{ user.username }}'s profile picture" class="profile-picture">
+                <div class="profile-info">
+                    <!-- Username -->
+                    <h2 id="username-display">{{ user.username }}</h2>
+                    <small class="joined-date">Joined on {{ user.joined_date.strftime('%B %d, %Y') }}</small>
+                    <label for="username-input" class="form-label" style="display: none;">Username</label>
+                    <input type="text" id="username-input" class="form-control" value="{{ user.username }}" style="display: none;">
+
+                    <!-- Location -->
+                    <p id="location-display" class="location">{{ user.location or "Location not provided" }}</p>
+                    <label for="location-input" class="form-label" style="display: none;">Location</label>
+                    <input type="text" id="location-input" class="form-control" value="{{ user.location }}" style="display: none;">
+
+                    <!-- Website -->
+                    <p id="website-display" class="website">
+                        {% if user.website %}
+                            <a href="{{ user.website }}" target="_blank">{{ user.website }}</a>
+                        {% else %}
+                            {{ 'Website not provided' }}
+                        {% endif %}
+                    </p>
+                    <label for="website-input" class="form-label" style="display: none;">Website</label>
+                    <input type="text" id="website-input" class="form-control" value="{{ user.website }}" style="display: none;">
+
+                    <!-- Bio -->
+                    <p id="bio-display" class="bio">{{ user.bio or "This user has not added a bio yet." }}</p>
+                    <label for="bio-input" class="form-label" style="display: none;">Bio</label>
+                    <textarea id="bio-input" class="form-control" style="display: none;">{{ user.bio }}</textarea>
+
+                    <!-- Edit and Save Buttons -->
+                    <button id="edit-btn" onclick="enableEditMode()">Edit Profile</button>
+                    <button id="save-btn" onclick="saveChanges()" style="display: none;">Save Changes</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gardening Preferences -->
+        <div class="preferences">
+            <h3>Gardening Preferences</h3>
+
+            <!-- Preferred Garden Type -->
+            <p><strong>Preferred Garden Type:</strong> <span
+                    id="garden-type-display">{{ user.preferred_garden_type or "Not specified" }}</span></p>
+            <label for="garden-type-input" class="form-label" style="display: none;">Preferred Garden Type</label>
+            <input type="text" id="garden-type-input" class="form-control" value="{{ user.preferred_garden_type }}" style="display: none;">
+
+            <!-- Planting Zone -->
+            <p><strong>Planting Zone:</strong> <span id="planting-zone-display">{{ user.preferred_planting_zone or "Not specified" }}</span>
+            </p>
+            <label for="planting-zone-input" class="form-label" style="display: none;">Planting Zone</label>
+            <input type="text" id="planting-zone-input" class="form-control" value="{{ user.preferred_planting_zone }}"
+                   style="display: none;">
+        </div>
+
+                <!-- Social Information as Left Column -->
+                <div class="social-info">
+                    <h3>Social Connections</h3>
+                    <p><strong>Followers:</strong> {{ user.followers|length }}</p>
+                    <p><strong>Following:</strong> {{ user.following|length }}</p>
+                </div>
+
+
+        <!-- User's Posts Section -->
+        <div class="user-posts">
+            <h3>Posts by {{ user.username }}</h3>
+            {% if user.posts %}
+                <div class="post-list">
+                    {% for post in user.posts %}
+                        <div class="post-item">
+                            <h4><a href="{{ url_for('post.post_detail', post_id=post.id) }}">{{ post.title }}</a></h4>
+                            <p class="post-date">{{ post.date_posted.strftime('%B %d, %Y') }}</p>
+                            <p class="post-content">{{ post.content[:100] }}{% if post.content|length > 100 %}...{% endif %}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>{{ user.username }} hasn't posted anything yet.</p>
+            {% endif %}
+        </div>
+
+        <!-- JavaScript for Edit Mode -->
+        <script>
+            function enableEditMode() {
+                document.getElementById("edit-btn").style.display = "none";
+                document.getElementById("save-btn").style.display = "inline-block";
+
+                // Show labels and toggle display fields to input fields
+                toggleField("username");
+                toggleField("location");
+                toggleField("website");
+                toggleField("bio", isTextArea = true);
+                toggleField("garden-type");
+                toggleField("planting-zone");
+            }
+
+            function saveChanges() {
+                // Simulate save by displaying fields and hiding input elements
+                toggleField("username", true);
+                toggleField("location", true);
+                toggleField("website", true);
+                toggleField("bio", true, isTextArea = true);
+                toggleField("garden-type", true);
+                toggleField("planting-zone", true);
+
+                document.getElementById("edit-btn").style.display = "inline-block";
+                document.getElementById("save-btn").style.display = "none";
+                alert("Changes saved!");
+            }
+
+            function toggleField(field, save = false, isTextArea = false) {
+                const display = document.getElementById(`${field}-display`);
+                const input = document.getElementById(`${field}-input`);
+                const label = document.querySelector(`label[for=${field}-input]`);
+
+                if (save) {
+                    if (isTextArea) {
+                        display.innerHTML = input.value;
+                    } else {
+                        display.textContent = input.value;
+                    }
+                    display.style.display = "block";
+                    input.style.display = "none";
+                    label.style.display = "none";
+                } else {
+                    display.style.display = "none";
+                    input.style.display = "block";
+                    label.style.display = "block";
+                }
+            }
+        </script>
+    </div>
+{% endblock %}

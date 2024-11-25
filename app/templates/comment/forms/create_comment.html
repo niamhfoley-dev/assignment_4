@@ -1,0 +1,30 @@
+<form method="POST" action="{{ url_for('comment.create_comment', post_id=post.id) }}">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.content.label }}
+        {{ form.content(class="form-control", placeholder="Write your comment...", autofocus=True) }}
+        {% if form.content.errors %}
+            <div class="text-danger">
+                {% for error in form.content.errors %}
+                    <small>{{ error }}</small>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <small id="charCount">300 characters remaining</small>
+    </div>
+    <div class="form-group">
+        {{ form.submit(class="btn btn-primary") }}
+    </div>
+</form>
+
+<script>
+    function disableSubmitButton(form) {
+        form.querySelector('[type="submit"]').disabled = true;
+    }
+    function updateCharCount(textarea) {
+        const maxLength = 300;
+        const currentLength = textarea.value.length;
+        const remaining = maxLength - currentLength;
+        document.getElementById('charCount').textContent = `${remaining} characters remaining`;
+    }
+</script>

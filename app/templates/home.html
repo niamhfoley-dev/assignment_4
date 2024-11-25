@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Gardening Social{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <div class="container">
+        <div class="home-page">
+            <h1>Welcome to Gardening Social!</h1>
+            <p class="intro">Connect with fellow gardeners, share your plant progress, and get inspired by beautiful gardens from around the
+                world!</p>
+
+            <!-- Recent Posts Section -->
+            <section class="recent-posts">
+                <h2>Recent Posts</h2>
+                {% if posts %}
+                    <div class="post-list">
+                        {% for post in posts %}
+                            <div class="post">
+                                <h3><a href="{{ url_for('post.post_detail', post_id=post.id) }}">{{ post.title }}</a></h3>
+                                <p class="post-content">{{ post.content[:150] }}{% if post.content|length > 150 %}...{% endif %}</p>
+                                <p class="post-meta">Posted by <a
+                                        href="{{ url_for('profile.user_profile', username=post.author.username) }}">{{ post.author.username }}</a>
+                                    on {{ post.date_posted.strftime('%Y-%m-%d') }}</p>
+                                <a class="btn btn-secondary" href="{{ url_for('post.post_detail', post_id=post.id) }}">Read more</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No posts to display. Start sharing your garden journey!</p>
+                {% endif %}
+            </section>
+
+            <!-- Call to Action -->
+            {% if not current_user.is_authenticated %}
+                <section class="cta">
+                    <h2>Join Gardening Social Today!</h2>
+                    <p>Share your garden with the community, get tips, and make friends who love plants as much as you do.</p>
+                    <a class="btn btn-primary" href="{{ url_for('auth.register') }}">Sign Up</a>
+                    <a class="btn btn-secondary" href="{{ url_for('auth.login') }}">Log In</a>
+                </section>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

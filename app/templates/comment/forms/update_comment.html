@@ -1,0 +1,45 @@
+<!-- update_comment.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Edit Comment</h2>
+    <form method="POST" action="{{ url_for('comment.update_comment', comment_id=comment.id) }}" onsubmit="disableSubmitButton(this)">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            {{ form.content.label }}
+            {{ form.content(class="form-control", placeholder="Edit your comment...", maxlength="300", oninput="updateCharCount(this)", autofocus=True) }}
+
+            <!-- Display error messages for content field -->
+            {% if form.content.errors %}
+                <div class="text-danger">
+                    {% for error in form.content.errors %}
+                        <small>{{ error }}</small>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <small id="charCount">300 characters remaining</small>
+        </div>
+
+        <div class="form-group">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+</div>
+
+<!-- JavaScript to manage character count and disable submit button -->
+<script>
+    function updateCharCount(textarea) {
+        const maxLength = 300;
+        const currentLength = textarea.value.length;
+        const remaining = maxLength - currentLength;
+        document.getElementById('charCount').textContent = `${remaining} characters remaining`;
+    }
+
+    function disableSubmitButton(form) {
+        form.querySelector('[type="submit"]').disabled = true;
+    }
+</script>
+{% endblock %}

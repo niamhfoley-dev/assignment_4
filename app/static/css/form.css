@@ -1,0 +1,131 @@
+form {
+    margin: 1em;
+}
+/* Container for forms */
+.form-container {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h2 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 1.75rem;
+}
+
+/* General Form Styling */
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Input fields */
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+
+/* Submit Button Styling */
+.btn {
+    display: inline-block;
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #1d6fa5;
+}
+
+.btn-secondary {
+    background-color: #2ecc71;
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background-color: #27ae60;
+}
+
+/* Error Message Styling */
+.text-danger {
+    color: #e74c3c;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
+
+/* Success Message Styling */
+.text-success {
+    color: #2ecc71;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
+
+/* Placeholder Text Styling */
+.form-control::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+/* Additional Button Styling */
+.form-footer {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.form-footer a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.form-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Design for Small Screens */
+@media (max-width: 576px) {
+    .form-container {
+        padding: 1.5rem;
+    }
+
+    .form-control {
+        padding: 0.6rem;
+        font-size: 0.95rem;
+    }
+
+    .btn {
+        padding: 0.6rem;
+        font-size: 0.95rem;
+    }
+}

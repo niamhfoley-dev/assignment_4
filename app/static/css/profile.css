@@ -1,0 +1,127 @@
+/* Profile Container */
+.profile-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Two-column row for profile-header and social-info */
+.profile-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+/* Profile Header (Left Column) */
+.profile-header {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.profile-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #3498db;
+}
+
+.profile-info {
+    font-size: 1rem;
+}
+
+/* Social Info (Right Column) */
+.social-info {
+    flex: 1;
+    min-width: 250px;
+    background-color: #f9f9f9;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: left;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Section Titles */
+h2, h3 {
+    color: #2c3e50;
+}
+
+/* Preferences Section */
+.preferences {
+    margin-top: 2rem;
+}
+
+.preferences h3 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.preferences p {
+    color: #666;
+    margin: 0.25rem 0;
+}
+
+/* Posts Section */
+.user-posts {
+    margin-top: 2rem;
+}
+
+.user-posts h3 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.post-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.post-item {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.post-item h4 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.post-item h4 a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.post-item h4 a:hover {
+    color: #1d6fa5;
+}
+
+.post-date {
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 0.5rem;
+}
+
+.post-content {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .profile-row {
+        flex-direction: column;
+    }
+
+    .social-info,
+    .profile-header {
+        width: 100%;
+    }
+}

@@ -1,0 +1,148 @@
+/* Reset basic styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    line-height: 1.6;
+    background-color: #f4f4f9;
+    color: #555559;
+}
+
+/* Navbar Styling */
+.navbar {
+    background-color: #2c3e50;
+    padding: 1rem;
+    color: #555559;
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar a {
+    color: #555559;
+    text-decoration: none;
+    margin-left: 1rem;
+    transition: color 0.3s;
+}
+
+.navbar a:hover {
+    color: #3498db;
+}
+
+/* Flash Messages */
+.flash-messages {
+    margin-top: 1rem;
+    padding: 1rem;
+}
+
+.flash-message {
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.flash-message.success {
+    background-color: #2ecc71;
+    color: #fff;
+}
+
+.flash-message.danger {
+    background-color: #e74c3c;
+    color: #fff;
+}
+
+.flash-message.warning {
+    background-color: #f39c12;
+    color: #fff;
+}
+
+.flash-message.info {
+    background-color: #3498db;
+    color: #fff;
+}
+
+/* Main Content Area */
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Styling */
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 3px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #1d6fa5;
+}
+
+.btn-secondary {
+    background-color: #2ecc71;
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background-color: #27ae60;
+}
+
+/* Footer Styling */
+.footer {
+    background-color: #2c3e50;
+    color: #555559;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 3rem;
+    border-top: 1px solid #34495e;
+}
+
+.footer p {
+    margin: 0.5rem 0;
+}
+
+.footer a {
+    color: #555559;
+    margin: 0 0.5rem;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    color: #3498db;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .navbar .container {
+        flex-direction: column;
+    }
+
+    .container {
+        padding: 1rem;
+        margin: 1rem;
+    }
+}

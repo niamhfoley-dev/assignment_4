@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} - Gardening Social{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/post_detail.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+
+    <div class="post-container">
+        <!-- Post Details -->
+        <div class="post-header">
+            <h1>{{ post.title }}</h1>
+            <p class="post-date">Posted on {{ post.date_posted.strftime('%B %d, %Y') }} by {{ post.author.username }}</p>
+            <p class="post-content">{{ post.content }}</p>
+        </div>
+
+        <!-- Button to Open Comment Modal -->
+        <button class="btn btn-secondary" onclick="openCommentModal()">Add Comment</button>
+
+        <!-- Modal for Adding a New Comment -->
+        <div id="commentModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeCommentModal()">&times;</span>
+                <h2>Add a Comment</h2>
+                <form method="POST" action="{{ url_for('comment.create_comment', post_id=post.id) }}">
+                    {{ comment_form.hidden_tag() }}
+
+                    <div class="form-group">
+                        {{ comment_form.content.label }}
+                        {{ comment_form.content(class="form-control") }}
+                        {% if comment_form.content.errors %}
+                            <div class="text-danger">
+                                {% for error in comment_form.content.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Post Comment</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="comments-section">
+            <h3>Comments</h3>
+            {% if post.comments %}
+                <div class="comments-list">
+                    {% for comment in post.comments %}
+                        <div class="comment-item">
+                            <p class="comment-author">{{ comment.author.username }} says:</p>
+                            <p class="comment-date">{{ comment.date_posted.strftime('%B %d, %Y %I:%M %p') }}</p>
+                            <p class="comment-content">{{ comment.content }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No comments yet. Be the first to comment!</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- JavaScript for Modal Control -->
+    <script>
+        function openCommentModal() {
+            document.getElementById("commentModal").style.display = "block";
+        }
+
+        function closeCommentModal() {
+            document.getElementById("commentModal").style.display = "none";
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function (event) {
+            const modal = document.getElementById("commentModal");
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+{% endblock %}

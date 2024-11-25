@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}{{ user.username }}'s Profile - Gardening Social{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+
+    <div class="profile-container">
+        <div class="profile-row">
+            <!-- Profile Header with Picture and Basic Info -->
+            <div class="profile-header">
+                <img src="{{ user.profile_picture or url_for('static', filename='img/default_profile.webp') }}"
+                     alt="{{ user.username }}'s profile picture" class="profile-picture">
+                <div class="profile-info">
+                    <!-- Username -->
+                    <h2>{{ user.username }}</h2>
+                    <small class="joined-date">Joined on {{ user.joined_date.strftime('%B %d, %Y') }}</small>
+
+                    <!-- Location -->
+                    <p class="location">{{ user.location or "Location not provided" }}</p>
+
+                    <!-- Website -->
+                    <p class="website">
+                        {% if user.website %}
+                            <a href="{{ user.website }}" target="_blank">{{ user.website }}</a>
+                        {% else %}
+                            {{ 'Website not provided' }}
+                        {% endif %}
+                    </p>
+
+                    <!-- Bio -->
+                    <p class="bio">{{ user.bio or "This user has not added a bio yet." }}</p>
+
+                    <!-- Follow Button -->
+                    {% if current_user.is_authenticated and current_user.id != user.id %}
+                        <button id="follow-btn" class="btn"
+                                data-following="{{ 'true' if user in current_user.following else 'false' }}"
+                                onclick="toggleFollow({{ user.id }})">
+                            {{ 'Unfollow' if user in current_user.following else 'Follow' }}
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Gardening Preferences -->
+        <div class="preferences">
+            <h3>Gardening Preferences</h3>
+            <p><strong>Preferred Garden Type:</strong> {{ user.preferred_garden_type or "Not specified" }}</p>
+            <p><strong>Planting Zone:</strong> {{ user.preferred_planting_zone or "Not specified" }}</p>
+        </div>
+
+        <!-- Social Information -->
+        <div class="social-info">
+            <h3>Social Connections</h3>
+            <p><strong>Followers:</strong> {{ user.followers|length }}</p>
+            <p><strong>Following:</strong> {{ user.following|length }}</p>
+        </div>
+
+        <!-- User's Posts Section -->
+        <div class="user-posts">
+            <h3>Posts by {{ user.username }}</h3>
+            {% if user.posts %}
+                <div class="post-list">
+                    {% for post in user.posts %}
+                        <div class="post-item">
+                            <h4><a href="{{ url_for('post.post_detail', post_id=post.id) }}">{{ post.title }}</a></h4>
+                            <p class="post-date">{{ post.date_posted.strftime('%B %d, %Y') }}</p>
+                            <p class="post-content">
+                                {{ post.content[:100] }}{% if post.content|length > 100 %}...{% endif %}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>{{ user.username }} hasn't posted anything yet.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        const followUrl = "{{ url_for('profile.toggle_follow', user_id=user.id) }}";
+
+        async function toggleFollow(userId) {
+            const followBtn = document.getElementById('follow-btn');
+
+            try {
+                const response = await fetch(followUrl, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                });
+
+                if (response.ok) {
+                    const data = response.json();
+                    if (data['status'] === 'unfollowed') {
+                        followBtn.textContent = 'Follow';
+                        followBtn.setAttribute('data-following', 'false');
+                    } else if (data.status === 'followed') {
+                        followBtn.textContent = 'Unfollow';
+                        followBtn.setAttribute('data-following', 'true');
+                    }
+                } else {
+                    alert(response['error']);
+
+                }
+            } catch (error) {
+                console.error('Error toggling follow:', error);
+                alert('An error occurred. Please try again later.');
+            }
+        }
+    </script>
+{% endblock %}
