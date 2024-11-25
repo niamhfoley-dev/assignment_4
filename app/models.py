@@ -69,6 +69,17 @@ class PostLike(db.Model):
         return f"<PostLike User {self.user_id} likes Post {self.post_id}>"
 
 
+class PostDislike(db.Model):
+    __tablename__ = 'post_dislikes'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.now(timezone.utc))  # Timezone-aware timestamp
+
+    def __repr__(self):
+        return f"<PostDislike User {self.user_id} dislikes Post {self.post_id}>"
+
+
 class CommentLike(db.Model):
     __tablename__ = 'comment_likes'
     id = db.Column(db.Integer, primary_key=True)
@@ -92,6 +103,7 @@ class Post(db.Model):
 
     # Relationship for likes
     likes = db.relationship('PostLike', backref='post', lazy='dynamic', cascade="all, delete-orphan")
+    dislikes = db.relationship('PostDislike', backref='post', lazy='dynamic', cascade="all, delete-orphan")
 
     # Additional Fields
     image_url = db.Column(db.String(300), nullable=True)
