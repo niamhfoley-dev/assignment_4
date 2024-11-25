@@ -3,83 +3,78 @@
 {% block title %}Explore - Gardening Social{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/explore.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/explore.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
 
-<div class="explore-container">
-    <h1>Explore Posts</h1>
+    <div class="explore-container">
+        <h1>Explore Posts</h1>
 
-    <!-- Button to Open Post Creation Modal -->
-    <button class="btn btn-primary" onclick="openModal()">Create a Post</button>
+        <!-- Button to Open Post Creation Modal -->
+        <button class="btn btn-primary" onclick="openModal()">Create a Post</button>
 
-    <!-- Modal for Creating a New Post -->
-    <div id="postModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h2>Create a New Post</h2>
-            <form method="POST" action="{{ url_for('main.explore') }}">
-                {{ form.hidden_tag() }}
+        <!-- Modal for Creating a New Post -->
+        <div id="postModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>Create a New Post</h2>
+                <form method="POST" action="{{ url_for('main.explore') }}">
+                    {{ form.hidden_tag() }}
 
-                <div class="form-group">
-                    {{ form.title.label }}
-                    {{ form.title(class="form-control") }}
-                    {% if form.title.errors %}
-                        <div class="text-danger">
-                            {% for error in form.title.errors %}
-                                <small>{{ error }}</small>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
+                    <div class="form-group">
+                        {{ form.title.label }}
+                        {{ form.title(class="form-control") }}
+                        {% if form.title.errors %}
+                            <div class="text-danger">
+                                {% for error in form.title.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
 
-                <div class="form-group">
-                    {{ form.content.label }}
-                    {{ form.content(class="form-control") }}
-                    {% if form.content.errors %}
-                        <div class="text-danger">
-                            {% for error in form.content.errors %}
-                                <small>{{ error }}</small>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
+                    <div class="form-group">
+                        {{ form.content.label }}
+                        {{ form.content(class="form-control") }}
+                        {% if form.content.errors %}
+                            <div class="text-danger">
+                                {% for error in form.content.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
 
-                <button type="submit" class="btn btn-primary">Post</button>
-            </form>
+                    <button type="submit" class="btn btn-primary">Post</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Posts Feed -->
+        <div class="posts-feed">
+            {% for post in posts %}
+                {% include 'post/post_partial.html' with context %}
+            {% else %}
+                <p>No posts to display.</p>
+            {% endfor %}
         </div>
     </div>
 
-    <!-- Posts Feed -->
-    <div class="posts-feed">
-        {% for post in posts %}
-            <div class="post-item">
-                <h3>{{ post.title }}</h3>
-                <p class="post-date">{{ post.date_posted.strftime('%B %d, %Y') }}</p>
-                <p>{{ post.content[:200] }}{% if post.content|length > 200 %}...{% endif %}</p>
-                <a href="{{ url_for('post.post_detail', post_id=post.id) }}" class="read-more">Read more</a>
-            </div>
-        {% else %}
-            <p>No posts to display.</p>
-        {% endfor %}
-    </div>
-</div>
-
-<!-- JavaScript for Modal Control -->
-<script>
-    function openModal() {
-        document.getElementById("postModal").style.display = "block";
-    }
-
-    function closeModal() {
-        document.getElementById("postModal").style.display = "none";
-    }
-
-    // Close modal when clicking outside of it
-    window.onclick = function(event) {
-        const modal = document.getElementById("postModal");
-        if (event.target === modal) {
-            modal.style.display = "none";
+    <!-- JavaScript for Modal Control -->
+    <script>
+        function openModal() {
+            document.getElementById("postModal").style.display = "block";
         }
-    }
-</script>
+
+        function closeModal() {
+            document.getElementById("postModal").style.display = "none";
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function (event) {
+            const modal = document.getElementById("postModal");
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 {% endblock %}
