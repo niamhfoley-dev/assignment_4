@@ -3,14 +3,15 @@
     <p class="post-date">{{ post.date_posted.strftime('%B %d, %Y') }}</p>
     <p class="post-content">
         {{ post.content[:100] }}{% if post.content|length > 100 %}...{% endif %}</p>
-
-    <!-- Like/Dislike Buttons -->
-    <div class="like-dislike-container">
-        <button class="like-btn" onclick="toggleReaction({{ post.id }}, 'like')">
-            👍 Like (<span id="like-count-{{ post.id }}">{{ post.likes.count()|default(0) }}</span>)
-        </button>
-        <button class="dislike-btn" onclick="toggleReaction({{ post.id }}, 'dislike')">
-            👎 Dislike (<span id="dislike-count-{{ post.id }}">{{ post.dislikes.count()|default(0) }}</span>)
-        </button>
-    </div>
+    {% if current_user.is_authenticated %}
+        <!-- Like/Dislike Buttons -->
+        <div class="like-dislike-container">
+            <button class="like-btn" onclick="toggleReaction({{ post.id }}, 'like')">
+                👍 Like (<span id="like-count-{{ post.id }}">{{ post.likes.count()|default(0) }}</span>)
+            </button>
+            <button class="dislike-btn" onclick="toggleReaction({{ post.id }}, 'dislike')">
+                👎 Dislike (<span id="dislike-count-{{ post.id }}">{{ post.dislikes.count()|default(0) }}</span>)
+            </button>
+        </div>
+    {% endif %}
 </div>
