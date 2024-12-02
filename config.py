@@ -8,3 +8,9 @@ class Config:
     FLASK_DEBUG = 1
     DEBUG = True
 
+class TestingConfig:
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'  # In-memory database for tests
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    WTF_CSRF_ENABLED = False  # Disable CSRF for tests
+    SECRET_KEY = 'test_secret_key'

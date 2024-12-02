@@ -26,28 +26,6 @@ def user_profile(username):
         return render_template('error.html', message="An error occurred while loading the profile."), 500
 
 
-@profile_bp.route('/account', methods=['GET', 'POST'])
-@login_required
-def account():
-    """Allow the current user to update their account information."""
-    try:
-        form = UpdateAccountForm()
-        if form.validate_on_submit():
-            current_user.username = form.username.data
-            current_user.email = form.email.data
-            # Handle profile picture update if applicable
-            db.session.commit()
-            flash('Your account has been updated!', 'success')
-            return redirect(url_for('profile.account'))
-        elif request.method == 'GET':
-            form.username.data = current_user.username
-            form.email.data = current_user.email
-        return render_template('account.html', form=form)
-    except Exception as e:
-        current_app.logger.error(f"Error updating account for {current_user.username}: {e}")
-        return render_template('error.html', message="An error occurred while updating your account."), 500
-
-
 @profile_bp.route('/follow/<int:user_id>', methods=['POST'])
 @login_required
 def toggle_follow(user_id):
@@ -71,20 +49,3 @@ def toggle_follow(user_id):
         current_app.logger.error(f"Error toggling follow: {e}")
         return jsonify({'error': 'An error occurred.'}), 500
 
-
-@profile_bp.route('/<string:username>/unfollow', methods=['POST'])
-@login_required
-def unfollow_user(username):
-    """Unfollow a user."""
-    try:
-        user_to_unfollow = User.query.filter_by(username=username).first_or_404()
-        if user_to_unfollow == current_user:
-            flash('You cannot unfollow yourself!', 'danger')
-            return redirect(url_for('profile.user_profile', username=username))
-        current_user.unfollow(user_to_unfollow)
-        db.session.commit()
-        flash(f'You have unfollowed {username}.', 'info')
-        return redirect(url_for('profile.user_profile', username=username))
-    except Exception as e:
-        current_app.logger.error(f"Error unfollowing user {username}: {e}")
-        return render_template('error.html', message="An error occurred while unfollowing the user."), 500

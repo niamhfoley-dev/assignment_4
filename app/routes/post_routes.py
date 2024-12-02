@@ -124,7 +124,8 @@ def reply_comment(post_id, comment_id):
             content=reply_form.content.data,
             user_id=current_user.id,
             post_id=post_id,
-            parent_comment_id=comment_id
+            parent_comment_id=comment_id,
+            author_id=current_user.id
         )
         db.session.add(reply)
         db.session.commit()

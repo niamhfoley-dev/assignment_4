@@ -58,18 +58,3 @@ def explore():
         current_app.logger.error(f"Error loading explore page: {e}")
         return render_template('error.html', message="An error occurred while loading the explore page."), 500
 
-
-@main_bp.route('/search')
-def search():
-    """Handle search queries for posts and users."""
-    try:
-        query = request.args.get('q', '')
-        if query:
-            posts = Post.query.filter(Post.content.ilike(f'%{query}%')).all()
-            users = User.query.filter(User.username.ilike(f'%{query}%')).all()
-            return render_template('search_results.html', posts=posts, users=users, query=query)
-        else:
-            return redirect(url_for('main.home'))
-    except Exception as e:
-        current_app.logger.error(f"Error during search: {e}")
-        return render_template('error.html', message="An error occurred during the search."), 500
