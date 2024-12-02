@@ -7,7 +7,7 @@ class Config:
     DB_PASSWORD = os.environ.get('DB_PASSWORD')
     DB_NAME = os.environ.get('DB_NAME')
     SQLALCHEMY_DATABASE_URI = (
-        F"postgresql://{DB_USER}:{DB_PASSWORD}@localhost:5433/{DB_NAME}"
+        F"postgresql://{DB_USER}:{DB_PASSWORD}@localhost:5432/{DB_NAME}"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TEMPLATES_AUTO_RELOAD = True
