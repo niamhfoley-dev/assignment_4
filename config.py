@@ -1,7 +1,13 @@
+import os
+
+
 class Config:
-    SECRET_KEY = 'your_secret_key'
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    DB_USER = os.environ.get('DB_USER')
+    DB_PASSWORD = os.environ.get('DB_PASSWORD')
+    DB_NAME = os.environ.get('DB_NAME')
     SQLALCHEMY_DATABASE_URI = (
-        "postgresql://my_flask_user:my_secure_password@localhost:5433/my_flask_app"
+        F"postgresql://{DB_USER}:{DB_PASSWORD}@localhost:5433/{DB_NAME}"
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TEMPLATES_AUTO_RELOAD = True
